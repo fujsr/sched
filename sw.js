@@ -1,4 +1,4 @@
-const VERSION = "staff-schedule-v3.0";
+const VERSION = "staff-schedule-v2.0";
 const APP_SHELL = [
   "./",
   "./index.html",
