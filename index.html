@@ -7,8 +7,8 @@
 <meta name="description" content="Staff schedule generator for the Fujairah Showroom">
 <meta name="theme-color" content="#0f3d3e">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" type="image/png" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -490,7 +490,7 @@ input:focus,select:focus{background-color:rgba(255,255,255,.92)}
     <div class="print-foot" id="printFoot"></div>
   </section>
 
-  <div class="footer">© 2026 Hesper · All rights reserved · v2.0</div>
+  <div class="footer">© Copyrights to Hesper</div>
 </main>
 
 <div class="bar no-print">
@@ -1008,8 +1008,8 @@ async function openInstallHelp(){
   try{ const r = await fetch("manifest.webmanifest", {cache:"no-store"}); manifestOK = r.ok && !!(await r.json()).icons; }catch(e){}
   checks.push([manifestOK, manifestOK ? "App manifest found" : "manifest.webmanifest not found — upload it next to index.html"]);
   let iconsOK = false;
-  try{ iconsOK = (await Promise.all(["icons/icon-192.png","icons/icon-512.png"].map(u=>fetch(u,{cache:"no-store"})))).every(r=>r.ok); }catch(e){}
-  checks.push([iconsOK, iconsOK ? "App icons found" : "Icons missing — upload the whole icons folder"]);
+  try{ iconsOK = (await Promise.all(["icon-192.png","icon-512.png"].map(u=>fetch(u,{cache:"no-store"})))).every(r=>r.ok); }catch(e){}
+  checks.push([iconsOK, iconsOK ? "App icons found" : "Icons missing — upload icon-192.png and icon-512.png next to index.html"]);
   let swOK = false;
   if("serviceWorker" in navigator){ try{ const reg = await navigator.serviceWorker.getRegistration(); swOK = !!(reg && (reg.active || reg.waiting || reg.installing)); }catch(e){} }
   checks.push([swOK, swOK ? "Offline service worker running" : `Service worker not running${swError ? " ("+swError+")" : ""} — upload sw.js next to index.html, then reload`]);
