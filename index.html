@@ -218,11 +218,99 @@ table.sched{border-collapse:separate;border-spacing:0;width:100%;min-width:760px
   .actions .btn-ghost{flex-direction:column;gap:4px;padding:8px 4px;font-size:12px;min-height:56px}
 }
 
+/* ================= GLASS THEME ================= */
+:root{
+  --glass:rgba(255,255,255,.52); --glass-2:rgba(255,255,255,.66); --glass-line:rgba(255,255,255,.7);
+  --blur:saturate(170%) blur(20px);
+}
+body{
+  min-height:100vh;
+  background:#0f3d3e linear-gradient(165deg,#082d2f 0%,#0f4a4b 30%,#2f7a70 55%,#d99a78 82%,#f3d6c0 100%) fixed;
+}
+.bg{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.bg i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.7;animation:float 20s ease-in-out infinite alternate}
+.bg i:nth-child(1){width:440px;height:440px;background:#e07a5f;top:-140px;right:-100px}
+.bg i:nth-child(2){width:380px;height:380px;background:#22b3a2;top:32%;left:-160px;animation-duration:24s}
+.bg i:nth-child(3){width:420px;height:420px;background:#f2c14e;bottom:-160px;right:8%;opacity:.5;animation-duration:28s}
+.bg i:nth-child(4){width:260px;height:260px;background:#8a5a9e;top:55%;right:-80px;opacity:.35;animation-duration:30s}
+@keyframes float{to{transform:translate(50px,70px) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.bg i{animation:none}}
+
+.hero{background:transparent;padding-bottom:26px}
+main{margin-top:0}
+.brand img{border-right-color:rgba(255,255,255,.35)}
+
+.card{
+  background:var(--glass);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-line);
+  box-shadow:0 12px 40px rgba(4,35,36,.22), inset 0 1px 0 rgba(255,255,255,.85);
+}
+.step{background:linear-gradient(135deg,#0f3d3e,#2f7a70);box-shadow:0 4px 12px rgba(15,61,62,.3)}
+.card-head .sub{color:#4d5a5b}
+label.field{color:#4d5a5b}
+input[type=date],input[type=text],select{background-color:rgba(255,255,255,.7);border-color:rgba(255,255,255,.9)}
+input:focus,select:focus{background-color:rgba(255,255,255,.92)}
+.member,.stat,.day{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 0 rgba(255,255,255,.8)}
+.seg,.view-toggle{background:rgba(15,61,62,.08)}
+.view-toggle button.on{background:rgba(255,255,255,.9)}
+.chip-btn{background:rgba(255,255,255,.55);border-color:rgba(255,255,255,.85)}
+.btn-ghost{background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.85);color:var(--ink)}
+.btn-ghost:hover{background:rgba(255,255,255,.85)}
+.btn-accent{background:linear-gradient(135deg,#e88b6f,#cf5f45)}
+.btn-wa{background:linear-gradient(135deg,#2fe07a,#1db954)}
+
+.table-wrap{background:rgba(255,255,255,.35);border-color:rgba(255,255,255,.75)}
+.sched th{background:rgba(15,61,62,.9);backdrop-filter:blur(8px)}
+.sched td{background:rgba(255,255,255,.55);border-bottom-color:rgba(15,61,62,.08)}
+.sched td:first-child{background:rgba(255,253,250,.92)}
+.sched tr.r-sun td{background:rgba(238,236,235,.6)}
+.sched tr.r-sun td:first-child{background:rgba(242,239,234,.95)}
+.sched tr.r-hol td{background:rgba(251,231,198,.5)}
+.sched tr.r-hol td:first-child{background:rgba(253,240,219,.95)}
+.day-h{background:rgba(255,255,255,.5);border-bottom-color:rgba(15,61,62,.08)}
+.day.hol .day-h{background:rgba(251,231,198,.75)}
+.day.sun .day-h{background:rgba(238,236,235,.75)}
+.day-b .row + .row{border-top-color:rgba(15,61,62,.1)}
+
+.bar{background:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.55);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur)}
+.install-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.install-btn:hover{background:rgba(255,255,255,.26)}
+.install-btn.hide{display:none}
+.ios-hint{background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.toast{background:rgba(15,61,62,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2)}
+.footer{color:#5b4a40}
+
+/* Install help sheet */
+.sheet-bg{position:fixed;inset:0;z-index:60;background:rgba(4,30,31,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center;padding:16px}
+.sheet-bg.show{display:flex}
+@media (min-width:700px){.sheet-bg{align-items:center}}
+.sheet{width:100%;max-width:480px;max-height:85vh;overflow:auto;background:rgba(255,255,255,.82);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid rgba(255,255,255,.9);border-radius:22px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,.3);margin-bottom:var(--safe-bottom)}
+.sheet h3{margin:0 0 4px;font-size:18px;color:var(--ink)}
+.sheet .lead{margin:0 0 14px;font-size:13px;color:var(--muted)}
+.sheet ol{margin:0 0 14px;padding-left:20px;display:grid;gap:6px;font-size:14px}
+.checks{display:grid;gap:6px;margin:0 0 16px;padding:0;list-style:none;font-size:13px}
+.checks li{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.6)}
+.checks .ok{color:#1e6b3a;font-weight:800}.checks .bad{color:#a8302b;font-weight:800}
+.sheet .btn{width:100%}
+
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .card{background:rgba(255,255,255,.93)}
+  .bar{background:rgba(244,239,230,.96)}
+  .sheet{background:#fff}
+}
+
 /* ---------- PRINT ---------- */
 @page{size:A4 landscape;margin:10mm}
 @media print{
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{background:#fff;padding:0;font-size:10px}
+  body{background:#fff!important;padding:0;font-size:10px}
+  .bg,.sheet-bg{display:none!important}
+  #scheduleCard,.table-wrap{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important}
+  .sched td{background:#fff!important}
+  .sched tr.r-sun td{background:#f4f2ef!important}
+  .sched tr.r-hol td{background:#fff3e0!important}
+  .sched th{background:#0f3d3e!important;backdrop-filter:none!important}
   .hero,.no-print,.bar,.toast,.footer,.card:not(#scheduleCard),.toolbar,.days,.stats{display:none!important}
   main{margin:0;padding:0;max-width:none;display:block}
   #scheduleCard{display:block!important;box-shadow:none;border:0;padding:0}
@@ -252,6 +340,18 @@ table.sched{border-collapse:separate;border-spacing:0;width:100%;min-width:760px
 </head>
 
 <body>
+<div class="bg" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+<div class="sheet-bg" id="installSheet" role="dialog" aria-modal="true" aria-labelledby="installTitle">
+  <div class="sheet">
+    <h3 id="installTitle">Install Staff Schedule</h3>
+    <p class="lead" id="installLead"></p>
+    <ol id="installSteps"></ol>
+    <p class="lead" style="margin-bottom:8px"><b>Install check for this device</b></p>
+    <ul class="checks" id="installChecks"></ul>
+    <button class="btn btn-primary" id="installClose">Got it</button>
+  </div>
+</div>
 <header class="hero">
   <div class="hero-inner">
     <div class="brand">
@@ -843,20 +943,79 @@ if(!hadSaved && window.matchMedia("(max-width:760px)").matches) state.view = "ca
 renderPeriod(); renderTeam(); renderTags(); loadLogo();
 
 /* ================= PWA ================= */
+let swError = "";
 if("serviceWorker" in navigator){
-  window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js").catch(()=>{}));
+  window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js", {scope:"./"}).catch(e=>{ swError = e.message || String(e); }));
 }
 let deferredPrompt = null;
-window.addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); deferredPrompt = e; $("installBtn").classList.add("show"); });
-$("installBtn").addEventListener("click", async ()=>{
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null;
-  $("installBtn").classList.remove("show");
-});
-window.addEventListener("appinstalled", ()=>{ $("installBtn").classList.remove("show"); toast("App installed"); });
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+const UA = navigator.userAgent;
+const isIOS = /iphone|ipad|ipod/i.test(UA) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+const isAndroid = /android/i.test(UA);
+const isSamsung = /SamsungBrowser/i.test(UA);
+const isInApp = /FBAN|FBAV|Instagram|WhatsApp|Line\/|Snapchat|; wv\)|GSA\//i.test(UA);
+const isIOSSafari = isIOS && /Safari/i.test(UA) && !/CriOS|FxiOS|EdgiOS/i.test(UA);
 const standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
-if(isIOS && !standalone) $("iosHint").classList.add("show");
+
+// Button is always visible (unless already running as the installed app)
+if(standalone) $("installBtn").classList.add("hide");
+else if(isIOS) $("iosHint").classList.add("show");
+
+window.addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); deferredPrompt = e; });
+window.addEventListener("appinstalled", ()=>{ $("installBtn").classList.add("hide"); $("iosHint").classList.remove("show"); toast("App installed"); });
+
+$("installBtn").addEventListener("click", async ()=>{
+  if(deferredPrompt){
+    deferredPrompt.prompt();
+    const {outcome} = await deferredPrompt.userChoice; deferredPrompt = null;
+    if(outcome === "accepted") return;
+  }
+  openInstallHelp();
+});
+$("installClose").addEventListener("click", ()=> $("installSheet").classList.remove("show"));
+$("installSheet").addEventListener("click", e=>{ if(e.target.id==="installSheet") $("installSheet").classList.remove("show"); });
+
+async function openInstallHelp(){
+  let lead, steps;
+  if(isInApp){
+    lead = "You're inside another app's browser (e.g. WhatsApp or Instagram), which can't install apps.";
+    steps = ["Tap the ⋮ or ••• menu in this screen", `Choose <b>Open in ${isIOS?"Safari":"Chrome"}</b> (or "Open in browser")`, "Then tap Install App again"];
+  } else if(isIOS){
+    lead = isIOSSafari ? "On iPhone and iPad, apps are installed from Safari's Share menu." : "On iPhone and iPad, open this page in Safari to install it.";
+    steps = isIOSSafari
+      ? ["Tap the <b>Share</b> button ⬆︎ (bottom bar, or top on iPad)", "Scroll and tap <b>Add to Home Screen</b>", "Tap <b>Add</b> — the RAK icon appears on your home screen"]
+      : ["Copy this page's link", "Open it in <b>Safari</b>", "Tap <b>Share ⬆︎ → Add to Home Screen</b>"];
+  } else if(isSamsung){
+    lead = "In Samsung Internet:";
+    steps = ["Tap the menu <b>≡</b> at the bottom", "Tap <b>Add page to → Home screen</b> (or <b>Install</b>)", "Confirm with <b>Add</b>"];
+  } else if(isAndroid){
+    lead = "In Chrome on Android:";
+    steps = ["Tap the menu <b>⋮</b> (top right)", "Tap <b>Install app</b> or <b>Add to Home screen</b>", "Tap <b>Install</b>"];
+  } else {
+    lead = "In Chrome or Edge on a computer:";
+    steps = ["Click the install icon <b>⊕</b> at the right end of the address bar", "Or open the menu <b>⋮</b> → <b>Cast, save and share → Install page as app</b> (Edge: <b>Apps → Install this site as an app</b>)", "Firefox doesn't support installing — use Chrome or Edge"];
+  }
+  $("installLead").innerHTML = lead;
+  $("installSteps").innerHTML = steps.map(s=>`<li>${s}</li>`).join("");
+  $("installChecks").innerHTML = `<li>Checking…</li>`;
+  $("installSheet").classList.add("show");
+
+  // Diagnose the things that stop installation
+  const checks = [];
+  const secure = window.isSecureContext && location.protocol !== "file:";
+  checks.push([secure, secure ? "Opened from a secure web address (https)" :
+    location.protocol==="file:" ? "Opened as a file on the device — it must be opened from a website link (https)" : "Not on https — the host must use a secure https:// address"]);
+  let manifestOK = false;
+  try{ const r = await fetch("manifest.webmanifest", {cache:"no-store"}); manifestOK = r.ok && !!(await r.json()).icons; }catch(e){}
+  checks.push([manifestOK, manifestOK ? "App manifest found" : "manifest.webmanifest not found — upload it next to index.html"]);
+  let iconsOK = false;
+  try{ iconsOK = (await Promise.all(["icons/icon-192.png","icons/icon-512.png"].map(u=>fetch(u,{cache:"no-store"})))).every(r=>r.ok); }catch(e){}
+  checks.push([iconsOK, iconsOK ? "App icons found" : "Icons missing — upload the whole icons folder"]);
+  let swOK = false;
+  if("serviceWorker" in navigator){ try{ const reg = await navigator.serviceWorker.getRegistration(); swOK = !!(reg && (reg.active || reg.waiting || reg.installing)); }catch(e){} }
+  checks.push([swOK, swOK ? "Offline service worker running" : `Service worker not running${swError ? " ("+swError+")" : ""} — upload sw.js next to index.html, then reload`]);
+  checks.push([!isInApp, isInApp ? "Inside an in-app browser — open in Chrome or Safari" : "Normal browser"]);
+  $("installChecks").innerHTML = checks.map(([ok,t])=>`<li><span class="${ok?"ok":"bad"}">${ok?"✓":"✕"}</span><span>${t}</span></li>`).join("");
+}
 </script>
 </body>
 </html>

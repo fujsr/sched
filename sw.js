@@ -1,5 +1,5 @@
-// Service worker: offline support for the Staff Schedule app
-const VERSION = "staff-schedule-v2.2.0";
+// Service worker: offline support + installability for the Staff Schedule app
+const VERSION = "staff-schedule-v3.0.0";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -10,9 +10,7 @@ const APP_SHELL = [
   "./icons/icon-512.png",
   "./icons/maskable-512.png",
   "./icons/apple-touch-icon.png",
-  "./icons/favicon-32.png"
-];
-const CDN = [
+  "./icons/favicon-32.png",
   "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"
 ];
@@ -20,10 +18,10 @@ const CDN = [
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
     const cache = await caches.open(VERSION);
-    await cache.addAll(APP_SHELL);
-    // CDN files are best-effort so install never fails offline
-    await Promise.all(CDN.map(u => cache.add(new Request(u, { mode: "cors" })).catch(() => {})));
-    self.skipWaiting();
+    // Cache each file on its own: one missing or blocked file must never stop the
+    // worker from installing (a failed worker means the browser won't offer "Install").
+    await Promise.all(APP_SHELL.map(u => cache.add(u).catch(() => {})));
+    await self.skipWaiting();
   })());
 });
 
@@ -37,31 +35,30 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   const req = event.request;
-  if (req.method !== "GET") return;
+  if (req.method !== "GET" || !req.url.startsWith("http")) return;
 
-  // Pages: network first, fall back to cached app
+  // Pages: network first (always fresh when online), cached copy when offline
   if (req.mode === "navigate") {
-    event.respondWith(
-      fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(VERSION).then(c => c.put("./index.html", copy));
+    event.respondWith((async () => {
+      try {
+        const res = await fetch(req);
+        if (res.ok) { const copy = res.clone(); caches.open(VERSION).then(c => c.put("./index.html", copy)); }
         return res;
-      }).catch(() => caches.match("./index.html"))
-    );
+      } catch (e) {
+        return (await caches.match("./index.html")) || (await caches.match("./")) ||
+          new Response("<h1>Offline</h1><p>Open the app once while online.</p>", { headers: { "Content-Type": "text/html" } });
+      }
+    })());
     return;
   }
 
-  // Everything else (assets, fonts, CDN): cache first, update in background
-  event.respondWith(
-    caches.match(req).then(cached => {
-      const network = fetch(req).then(res => {
-        if (res && (res.ok || res.type === "opaque")) {
-          const copy = res.clone();
-          caches.open(VERSION).then(c => c.put(req, copy));
-        }
-        return res;
-      }).catch(() => cached);
-      return cached || network;
-    })
-  );
+  // Assets, fonts, PDF library: cache first, refresh in background
+  event.respondWith((async () => {
+    const cached = await caches.match(req);
+    const network = fetch(req).then(res => {
+      if (res && (res.ok || res.type === "opaque")) { const copy = res.clone(); caches.open(VERSION).then(c => c.put(req, copy)); }
+      return res;
+    }).catch(() => cached || Response.error());
+    return cached || network;
+  })());
 });
