@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fujairah Showroom | Staff Schedule</title>
+<meta name="description" content="Staff schedule generator for the Fujairah Showroom">
+<meta name="theme-color" content="#0f3d3e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Staff Schedule">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ink:#0f3d3e;          /* deep teal */
+  --ink-2:#165a5b;
+  --clay:#e07a5f;         /* terracotta accent */
+  --clay-2:#c8644a;
+  --sand:#f4efe6;         /* page background */
+  --card:#ffffff;
+  --line:#e6dfd3;
+  --text:#1f2a2b;
+  --muted:#6b7677;
+  --morning-bg:#fff4d6;  --morning-fg:#8a5a00;
+  --after-bg:#e3eefc;    --after-fg:#1d4f91;
+  --half-bg:#dff3e4;     --half-fg:#1e6b3a;
+  --leave-bg:#fde2e1;    --leave-fg:#a8302b;
+  --off-bg:#eeeceb;      --off-fg:#6b6766;
+  --hol-bg:#fbe7c6;      --hol-fg:#8c4b0b;
+  --radius:16px;
+  --shadow:0 1px 2px rgba(15,61,62,.06),0 8px 24px rgba(15,61,62,.08);
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  background:var(--sand);color:var(--text);font-size:15px;line-height:1.45;
+  padding-bottom:calc(90px + var(--safe-bottom));
+}
+button,input,select{font:inherit;color:inherit}
+
+/* ---------- Header ---------- */
+.hero{
+  background:
+    radial-gradient(1200px 300px at 110% -50%,rgba(224,122,95,.45),transparent 60%),
+    radial-gradient(800px 260px at -10% 120%,rgba(255,255,255,.08),transparent 60%),
+    linear-gradient(135deg,var(--ink),var(--ink-2));
+  color:#fff;padding:calc(18px + var(--safe-top)) 16px 64px;
+}
+.hero-inner{max-width:1180px;margin:auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:14px;flex:1;min-width:240px}
+.brand img{height:42px;width:auto;padding-right:14px;border-right:1px solid rgba(255,255,255,.3)}
+.brand h1{font-size:20px;margin:0;font-weight:800;letter-spacing:-.01em}
+.brand p{margin:2px 0 0;font-size:13px;opacity:.8}
+.install-btn{display:none;background:var(--clay);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.2)}
+.install-btn.show{display:inline-flex;align-items:center;gap:8px}
+
+main{max-width:1180px;margin:-44px auto 0;padding:0 16px;display:grid;gap:18px}
+
+/* ---------- Cards ---------- */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;border:1px solid rgba(15,61,62,.04)}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.step{width:30px;height:30px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+.card-head h2{font-size:17px;margin:0;font-weight:700}
+.card-head .sub{font-size:13px;color:var(--muted);margin:0}
+.card-head .grow{flex:1}
+
+label.field{display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+input[type=date],input[type=text],select{
+  width:100%;min-height:44px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fffdfa;
+  font-size:15px;color:var(--text);text-transform:none;letter-spacing:0;font-weight:500;outline:none;transition:border-color .15s,box-shadow .15s;
+  -webkit-appearance:none;appearance:none;
+}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236b7677' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+input:focus,select:focus{border-color:var(--clay);box-shadow:0 0 0 4px rgba(224,122,95,.18)}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid-3{display:grid;grid-template-columns:2fr 2fr auto;gap:12px;align-items:end}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:12px;border:0;cursor:pointer;font-weight:700;font-size:14px;transition:transform .1s,background .15s,box-shadow .15s;white-space:nowrap}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:var(--ink-2)}
+.btn-accent{background:var(--clay);color:#fff;box-shadow:0 6px 16px rgba(224,122,95,.35)}
+.btn-accent:hover{background:var(--clay-2)}
+.btn-ghost{background:#f1ece3;color:var(--ink)}
+.btn-ghost:hover{background:#e9e2d6}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-wa{background:#25d366;color:#fff;box-shadow:0 6px 16px rgba(37,211,102,.3)}
+.btn-wa:hover{background:#1ebe5b}
+
+.chips-quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip-btn{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink)}
+.chip-btn:hover{border-color:var(--clay);color:var(--clay-2)}
+.period-info{margin-top:12px;font-size:13px;color:var(--muted)}
+
+/* ---------- Team ---------- */
+.team{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:14px}
+.member{border:1.5px solid var(--line);border-radius:14px;padding:14px;background:#fffdfa;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;position:relative;min-width:0}
+.member *{min-width:0}
+input[type=date]{min-width:0;max-width:100%}
+.member-top{display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:13px;color:#fff;flex:none}
+.member-name{font-weight:700;font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.icon-btn{width:34px;height:34px;border-radius:10px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.icon-btn:hover{background:#f3ece2;color:var(--leave-fg)}
+.icon-btn svg{width:18px;height:18px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#f1ece3;border-radius:12px;padding:4px;gap:4px}
+.seg button{border:0;background:transparent;border-radius:9px;padding:9px 6px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
+.seg button.on[data-v=Morning]{background:var(--morning-bg);color:var(--morning-fg);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.seg button.on[data-v=Afternoon]{background:var(--after-bg);color:var(--after-fg);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.leave-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.add-member{display:flex;gap:10px;margin-top:14px}
+.add-member input{flex:1}
+
+/* ---------- Chips list ---------- */
+.tag-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;min-height:8px}
+.tag{display:inline-flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.tag.hol{background:var(--hol-bg);color:var(--hol-fg)}
+.tag.ws{background:var(--half-bg);color:var(--half-fg)}
+.tag button{border:0;background:rgba(0,0,0,.08);width:22px;height:22px;border-radius:50%;cursor:pointer;color:inherit;font-size:14px;line-height:1;display:grid;place-items:center}
+.empty{font-size:13px;color:var(--muted);font-style:italic}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.split > div h3{font-size:14px;margin:0 0 10px;color:var(--ink)}
+
+/* ---------- Schedule ---------- */
+#scheduleCard{display:none}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:14px}
+.view-toggle{display:inline-grid;grid-template-columns:1fr 1fr;background:#f1ece3;border-radius:12px;padding:4px;gap:4px}
+.view-toggle button{border:0;background:transparent;padding:8px 14px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;color:var(--muted)}
+.view-toggle button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.pill{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.p-m{background:var(--morning-bg);color:var(--morning-fg)}
+.p-a{background:var(--after-bg);color:var(--after-fg)}
+.p-h{background:var(--half-bg);color:var(--half-fg)}
+.p-l{background:var(--leave-bg);color:var(--leave-fg)}
+.p-o{background:var(--off-bg);color:var(--off-fg)}
+.p-x{background:var(--hol-bg);color:var(--hol-fg)}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:#fbf8f3;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font-size:20px;color:var(--ink)}
+.stat span{font-size:12px;color:var(--muted);font-weight:600}
+
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:14px;max-height:70vh;-webkit-overflow-scrolling:touch}
+table.sched{border-collapse:separate;border-spacing:0;width:100%;min-width:760px;font-size:13px}
+.sched th{position:sticky;top:0;z-index:2;background:var(--ink);color:#fff;font-weight:700;padding:12px 10px;text-align:center;font-size:12px;letter-spacing:.02em}
+.sched th:first-child{left:0;z-index:3;text-align:left}
+.sched td{padding:8px;border-bottom:1px solid var(--line);text-align:center;background:#fff}
+.sched td:first-child{position:sticky;left:0;z-index:1;text-align:left;background:#fffdfa;border-right:1px solid var(--line);white-space:nowrap}
+.sched .d-date{font-weight:700}
+.sched .d-day{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.sched .d-hol{display:block;font-size:11px;color:var(--hol-fg);font-weight:700;white-space:normal;max-width:150px}
+.sched tr.r-sun td{background:#f7f5f2}
+.sched tr.r-sun td:first-child{background:#f2efea}
+.sched tr.r-hol td{background:#fff8ec}
+.sched tr.r-hol td:first-child{background:#fdf0db}
+.sched tr.r-today td:first-child{box-shadow:inset 4px 0 0 var(--clay)}
+
+/* Day cards (mobile view) */
+.days{display:none;gap:10px}
+.day{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.day-h{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fbf8f3;border-bottom:1px solid var(--line)}
+.day-h .num{font-size:22px;font-weight:800;color:var(--ink);width:36px}
+.day-h .meta{flex:1;font-size:13px;font-weight:600;color:var(--muted)}
+.day-h .meta b{color:var(--text);display:block;font-size:14px}
+.day.hol .day-h{background:var(--hol-bg)}
+.day.sun .day-h{background:var(--off-bg)}
+.day-b{display:grid}
+.day-b .row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;font-size:13px;font-weight:600}
+.day-b .row + .row{border-top:1px dashed var(--line)}
+.day.collapsed .day-b{padding:10px 14px;font-size:13px;color:var(--muted);font-weight:600}
+.view-cards .days{display:grid}
+.view-cards .table-wrap{display:none}
+
+/* Bottom action bar (mobile) */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:10px 16px calc(10px + var(--safe-bottom));background:rgba(244,239,230,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
+.bar-inner{max-width:1180px;margin:auto;display:flex;gap:10px;justify-content:center}
+.bar .btn{flex:1;max-width:280px}
+
+.footer{text-align:center;font-size:12px;color:var(--muted);padding:20px 0 8px}
+
+/* Toast */
+.toast{position:fixed;left:50%;bottom:calc(86px + var(--safe-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--leave-fg)}
+
+/* iOS install hint */
+.ios-hint{display:none;background:#fff;border-radius:14px;padding:12px 14px;font-size:13px;color:var(--text);margin-top:12px;max-width:520px}
+.ios-hint.show{display:block}
+
+/* Print header (hidden on screen) */
+.print-head{display:none}
+
+@media (max-width:760px){
+  body{font-size:14px}
+  .hero{padding-bottom:58px}
+  .brand img{height:34px}
+  .brand h1{font-size:17px}
+  .card{padding:16px}
+  .grid-3,.split{grid-template-columns:1fr}
+  .grid-3 .btn{width:100%}
+  .toolbar{flex-direction:column;align-items:stretch}
+  .view-toggle{width:100%}
+  /* two big WhatsApp buttons on top, four small ones below */
+  .actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .actions .btn-wa{grid-column:span 2}
+  .actions .btn-ghost{flex-direction:column;gap:4px;padding:8px 4px;font-size:12px;min-height:56px}
+}
+
+/* ---------- PRINT ---------- */
+@page{size:A4 landscape;margin:10mm}
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{background:#fff;padding:0;font-size:10px}
+  .hero,.no-print,.bar,.toast,.footer,.card:not(#scheduleCard),.toolbar,.days,.stats{display:none!important}
+  main{margin:0;padding:0;max-width:none;display:block}
+  #scheduleCard{display:block!important;box-shadow:none;border:0;padding:0}
+  .card-head{display:none}
+  .print-head{display:flex!important;align-items:center;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:8px}
+  .print-head img{height:30px}
+  .print-head h2{margin:0;font-size:15px;color:var(--ink)}
+  .print-head p{margin:2px 0 0;font-size:10px;color:var(--muted)}
+  .legend{margin:0 0 6px}
+  .pill{font-size:9px;padding:2px 7px}
+  .table-wrap{display:block!important;overflow:visible;max-height:none;border:0;border-radius:0}
+  table.sched{min-width:0;font-size:9.5px;table-layout:fixed}
+  .sched th{position:static;padding:6px 4px;font-size:9px}
+  .sched td{position:static!important;padding:4px 3px;border-bottom:1px solid #ddd}
+  .sched td:first-child{width:16%}
+  .sched tr{page-break-inside:avoid;break-inside:avoid}
+  .sched thead{display:table-header-group}
+  .sched .pill{white-space:normal}
+  .print-foot{display:block!important;margin-top:8px;font-size:9px;color:var(--muted);text-align:right}
+}
+.print-foot{display:none}
+</style>
+
+<!-- jsPDF + autoTable (PDF export) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js" defer></script>
+</head>
+
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="brand">
+      <img src="logo-white.png" alt="RAK Ceramics">
+      <div>
+        <h1>Fujairah Showroom</h1>
+        <p>Staff Schedule Planner</p>
+      </div>
+    </div>
+    <button class="install-btn" id="installBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 3v12m0 0l-5-5m5 5l5-5M5 21h14"/></svg>
+      Install App
+    </button>
+  </div>
+  <div class="hero-inner"><div class="ios-hint" id="iosHint">To install on iPhone/iPad: tap <b>Share</b> <span aria-hidden="true">⬆︎</span> then <b>Add to Home Screen</b>.</div></div>
+</header>
+
+<main>
+  <!-- STEP 1: PERIOD -->
+  <section class="card no-print">
+    <div class="card-head">
+      <div class="step">1</div>
+      <div class="grow"><h2>Schedule period</h2><p class="sub">Choose the dates to plan</p></div>
+    </div>
+    <div class="grid-2">
+      <label class="field">From<input type="date" id="startDate"></label>
+      <label class="field">To<input type="date" id="endDate"></label>
+    </div>
+    <div class="chips-quick">
+      <button class="chip-btn" data-q="week">This week</button>
+      <button class="chip-btn" data-q="nextweek">Next week</button>
+      <button class="chip-btn" data-q="month">This month</button>
+      <button class="chip-btn" data-q="nextmonth">Next month</button>
+    </div>
+    <div class="period-info" id="periodInfo"></div>
+  </section>
+
+  <!-- STEP 2: TEAM -->
+  <section class="card no-print">
+    <div class="card-head">
+      <div class="step">2</div>
+      <div class="grow"><h2>Team &amp; shifts</h2><p class="sub">Set each person's shift, weekly half day and leave</p></div>
+    </div>
+    <div class="team" id="team"></div>
+    <div class="add-member">
+      <input type="text" id="newMember" placeholder="Add staff member name">
+      <button class="btn btn-ghost" id="addMemberBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Add
+      </button>
+    </div>
+  </section>
+
+  <!-- STEP 3: HOLIDAYS -->
+  <section class="card no-print">
+    <div class="card-head">
+      <div class="step">3</div>
+      <div class="grow"><h2>Holidays &amp; working Sundays</h2><p class="sub">Public holidays close the showroom; working Sundays override the weekly off</p></div>
+    </div>
+    <div class="split">
+      <div>
+        <h3>Public holidays</h3>
+        <div class="grid-3">
+          <label class="field">Date<input type="date" id="holidayDate"></label>
+          <label class="field">Name<input type="text" id="holidayName" placeholder="e.g. National Day"></label>
+          <button class="btn btn-primary" id="addHolidayBtn">Add</button>
+        </div>
+        <div class="tag-list" id="holidayList"></div>
+      </div>
+      <div>
+        <h3>Working Sundays</h3>
+        <div class="grid-3" style="grid-template-columns:1fr auto">
+          <label class="field">Sunday date<input type="date" id="workingSundayDate"></label>
+          <button class="btn btn-primary" id="addSundayBtn">Add</button>
+        </div>
+        <div class="tag-list" id="sundayList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE -->
+  <section class="card" id="scheduleCard">
+    <div class="card-head">
+      <div class="step">✓</div>
+      <div class="grow"><h2>Generated schedule</h2><p class="sub" id="schedSub"></p></div>
+    </div>
+
+    <div class="print-head">
+      <div>
+        <h2>Fujairah Showroom — Staff Schedule</h2>
+        <p id="printPeriod"></p>
+      </div>
+      <img src="logo.png" alt="RAK Ceramics">
+    </div>
+
+    <div class="toolbar">
+      <div class="view-toggle" id="viewToggle">
+        <button data-view="table" class="on">Table</button>
+        <button data-view="cards">By day</button>
+      </div>
+      <div class="actions">
+        <button class="btn btn-wa" id="waJpgBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 001.8-1.2 2.2 2.2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg>Send JPG
+        </button>
+        <button class="btn btn-wa" id="waPdfBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2a8.2 8.2 0 01-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 001.8-1.2 2.2 2.2 0 00.1-1.2c0-.1-.2-.2-.4-.3z"/></svg>Send PDF
+        </button>
+        <button class="btn btn-ghost" id="jpgBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>JPG
+        </button>
+        <button class="btn btn-ghost" id="printBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/></svg>Print
+        </button>
+        <button class="btn btn-ghost" id="pdfBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6M12 12v6m0 0l-3-3m3 3l3-3"/></svg>PDF
+        </button>
+        <button class="btn btn-ghost" id="shareBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>Text
+        </button>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="pill p-m">Morning</span>
+      <span class="pill p-a">Afternoon</span>
+      <span class="pill p-h">Half Day</span>
+      <span class="pill p-l">Leave</span>
+      <span class="pill p-o">Off</span>
+      <span class="pill p-x">Holiday</span>
+    </div>
+
+    <div class="stats" id="stats"></div>
+    <div id="viewArea">
+      <div class="table-wrap" id="tableWrap"></div>
+      <div class="days" id="dayCards"></div>
+    </div>
+    <div class="print-foot" id="printFoot"></div>
+  </section>
+
+  <div class="footer">© Copyrights to Hesper</div>
+</main>
+
+<div class="bar no-print">
+  <div class="bar-inner">
+    <button class="btn btn-accent" id="generateBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M9 15l2 2 4-4"/></svg>
+      Generate Schedule
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= Data & storage ================= */
+const DEFAULT_STAFF = ["ASMAA DAMI","EME GARDUCE","MARIA KATRINA","SAYEED BIN AMMARI","RICHARD SOLOMON","JUNAID ALAM"];
+const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const SHORT_DAYS = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const AVATAR_COLORS = ["#0f3d3e","#e07a5f","#3d7a6b","#8a5a9e","#c28a2c","#2f6690","#b0475c","#5b6b2f"];
+const STORE_KEY = "fujairah-schedule-v2";
+
+let state = {
+  start:"", end:"",
+  staff: DEFAULT_STAFF.map(name=>({name, shift:"Morning", halfDay:"", leaveFrom:"", leaveTo:""})),
+  holidays:[], workingSundays:[], view:"table"
+};
+let lastSchedule = null;
+
+function load(){
+  try{ const s = JSON.parse(localStorage.getItem(STORE_KEY)); if(s && Array.isArray(s.staff)) state = Object.assign(state, s); }catch(e){}
+}
+function save(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){} }
+
+/* ================= Date helpers (local, timezone-safe) ================= */
+const pad = n => String(n).padStart(2,"0");
+const toISO = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const fromISO = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const nice = s => { const d = fromISO(s); return `${pad(d.getDate())} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`; };
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const initials = n => n.trim().split(/\s+/).slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+/* ================= UI helpers ================= */
+const $ = id => document.getElementById(id);
+let toastTimer;
+function toast(msg, err){
+  const t = $("toast"); t.textContent = msg; t.className = "toast show" + (err ? " err" : "");
+  clearTimeout(toastTimer); toastTimer = setTimeout(()=> t.className = "toast", 2400);
+}
+
+/* ================= Period ================= */
+function renderPeriod(){
+  $("startDate").value = state.start; $("endDate").value = state.end;
+  const info = $("periodInfo");
+  if(state.start && state.end && state.start <= state.end){
+    const days = Math.round((fromISO(state.end) - fromISO(state.start)) / 864e5) + 1;
+    info.textContent = `${nice(state.start)} → ${nice(state.end)} · ${days} day${days>1?"s":""}`;
+  } else info.textContent = "";
+}
+function quickRange(q){
+  const t = new Date(); t.setHours(0,0,0,0); let s, e;
+  if(q==="week" || q==="nextweek"){
+    s = new Date(t); s.setDate(t.getDate() - t.getDay() + (q==="nextweek"?7:0)); // week starts Sunday
+    e = new Date(s); e.setDate(s.getDate()+6);
+  } else {
+    const add = q==="nextmonth" ? 1 : 0;
+    s = new Date(t.getFullYear(), t.getMonth()+add, 1);
+    e = new Date(t.getFullYear(), t.getMonth()+add+1, 0);
+  }
+  state.start = toISO(s); state.end = toISO(e); save(); renderPeriod();
+}
+
+/* ================= Team ================= */
+function renderTeam(){
+  const box = $("team");
+  box.innerHTML = state.staff.map((m,i)=>`
+    <div class="member">
+      <div class="member-top">
+        <div class="avatar" style="background:${AVATAR_COLORS[i % AVATAR_COLORS.length]}">${esc(initials(m.name))}</div>
+        <div class="member-name" title="${esc(m.name)}">${esc(m.name)}</div>
+        <button class="icon-btn" data-remove="${i}" aria-label="Remove ${esc(m.name)}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        </button>
+      </div>
+      <div class="seg" role="group" aria-label="Shift">
+        <button data-i="${i}" data-v="Morning" class="${m.shift==="Morning"?"on":""}">☀ Morning</button>
+        <button data-i="${i}" data-v="Afternoon" class="${m.shift==="Afternoon"?"on":""}">◐ Afternoon</button>
+      </div>
+      <label class="field">Weekly half day
+        <select data-i="${i}" data-k="halfDay">
+          <option value="">None</option>
+          ${WEEKDAYS.map((d,idx)=>`<option value="${idx}" ${String(m.halfDay)===String(idx)?"selected":""}>${d}</option>`).join("")}
+        </select>
+      </label>
+      <div class="leave-row">
+        <label class="field">Leave from<input type="date" data-i="${i}" data-k="leaveFrom" value="${m.leaveFrom||""}"></label>
+        <label class="field">Leave to<input type="date" data-i="${i}" data-k="leaveTo" value="${m.leaveTo||""}"></label>
+      </div>
+    </div>`).join("");
+}
+$("team").addEventListener("click", e=>{
+  const seg = e.target.closest(".seg button");
+  if(seg){ state.staff[+seg.dataset.i].shift = seg.dataset.v; save(); renderTeam(); return; }
+  const rm = e.target.closest("[data-remove]");
+  if(rm){
+    const i = +rm.dataset.remove, name = state.staff[i].name;
+    if(confirm(`Remove ${name} from the team?`)){ state.staff.splice(i,1); save(); renderTeam(); toast(`${name} removed`); }
+  }
+});
+$("team").addEventListener("change", e=>{
+  const el = e.target; if(!el.dataset.k) return;
+  const m = state.staff[+el.dataset.i]; m[el.dataset.k] = el.value;
+  if(m.leaveFrom && m.leaveTo && m.leaveFrom > m.leaveTo){ toast("Leave end is before leave start", true); }
+  save();
+});
+function addMember(){
+  const name = $("newMember").value.trim().toUpperCase();
+  if(!name) return toast("Enter a name first", true);
+  if(state.staff.some(m=>m.name===name)) return toast("That name is already on the team", true);
+  state.staff.push({name, shift:"Morning", halfDay:"", leaveFrom:"", leaveTo:""});
+  $("newMember").value = ""; save(); renderTeam(); toast(`${name} added`);
+}
+
+/* ================= Holidays / Sundays ================= */
+function renderTags(){
+  state.holidays.sort((a,b)=>a.date.localeCompare(b.date));
+  state.workingSundays.sort();
+  $("holidayList").innerHTML = state.holidays.length
+    ? state.holidays.map((h,i)=>`<span class="tag hol">${nice(h.date)} · ${esc(h.name)}<button data-hol="${i}" aria-label="Remove">×</button></span>`).join("")
+    : `<span class="empty">No holidays added</span>`;
+  $("sundayList").innerHTML = state.workingSundays.length
+    ? state.workingSundays.map((d,i)=>`<span class="tag ws">${nice(d)}<button data-ws="${i}" aria-label="Remove">×</button></span>`).join("")
+    : `<span class="empty">No working Sundays</span>`;
+}
+function addHoliday(){
+  const date = $("holidayDate").value, name = $("holidayName").value.trim();
+  if(!date || !name) return toast("Pick a date and enter a name", true);
+  if(state.holidays.some(h=>h.date===date)) return toast("A holiday already exists on that date", true);
+  state.holidays.push({date,name}); $("holidayDate").value = ""; $("holidayName").value = "";
+  save(); renderTags(); toast("Holiday added");
+}
+function addWorkingSunday(){
+  const date = $("workingSundayDate").value;
+  if(!date) return toast("Pick a date", true);
+  if(fromISO(date).getDay() !== 0) return toast("That date is not a Sunday", true);
+  if(state.workingSundays.includes(date)) return toast("Already marked as working", true);
+  state.workingSundays.push(date); $("workingSundayDate").value = "";
+  save(); renderTags(); toast("Sunday marked as working day");
+}
+$("holidayList").addEventListener("click", e=>{ const b=e.target.closest("[data-hol]"); if(b){ state.holidays.splice(+b.dataset.hol,1); save(); renderTags(); }});
+$("sundayList").addEventListener("click", e=>{ const b=e.target.closest("[data-ws]"); if(b){ state.workingSundays.splice(+b.dataset.ws,1); save(); renderTags(); }});
+
+/* ================= Schedule logic ================= */
+function cellFor(member, iso, dow, holiday, workingSunday){
+  if(holiday) return {t:"Holiday", c:"p-x"};
+  if(member.leaveFrom && member.leaveTo && iso >= member.leaveFrom && iso <= member.leaveTo) return {t:"Leave", c:"p-l"};
+  if(dow === 0 && !workingSunday) return {t:"Off", c:"p-o"};
+  if(member.halfDay !== "" && +member.halfDay === dow) return {t:`${member.shift} (Half Day)`, c:"p-h"};
+  return {t:member.shift, c: member.shift==="Morning" ? "p-m" : "p-a"};
+}
+
+function generateSchedule(){
+  if(!state.start || !state.end) return toast("Choose a From and To date", true);
+  if(state.start > state.end) return toast("The From date must be before the To date", true);
+  if(!state.staff.length) return toast("Add at least one staff member", true);
+  const days = Math.round((fromISO(state.end) - fromISO(state.start)) / 864e5) + 1;
+  if(days > 400) return toast("Please choose a range under 400 days", true);
+
+  const today = toISO(new Date());
+  const rows = [];
+  for(let d = fromISO(state.start); toISO(d) <= state.end; d.setDate(d.getDate()+1)){
+    const iso = toISO(d), dow = d.getDay();
+    const hol = state.holidays.find(h=>h.date===iso);
+    const ws = state.workingSundays.includes(iso);
+    rows.push({iso, dow, hol, ws, today: iso===today,
+      cells: state.staff.map(m=>cellFor(m, iso, dow, hol, ws))});
+  }
+  lastSchedule = {rows, staff: state.staff.map(m=>m.name), start: state.start, end: state.end};
+  renderSchedule();
+  $("scheduleCard").style.display = "block";
+  $("scheduleCard").scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function renderSchedule(){
+  const {rows, staff} = lastSchedule;
+  const period = `${nice(lastSchedule.start)} – ${nice(lastSchedule.end)}`;
+  $("schedSub").textContent = `${period} · ${rows.length} days · ${staff.length} staff`;
+  $("printPeriod").textContent = `Period: ${period}`;
+  $("printFoot").textContent = `Generated ${nice(toISO(new Date()))} · © Hesper`;
+
+  // Stats
+  const workDays = rows.filter(r=>!r.hol && (r.dow!==0 || r.ws)).length;
+  const leaveCount = rows.reduce((n,r)=>n + r.cells.filter(c=>c.t==="Leave").length, 0);
+  $("stats").innerHTML = `
+    <div class="stat"><b>${rows.length}</b><span>Total days</span></div>
+    <div class="stat"><b>${workDays}</b><span>Working days</span></div>
+    <div class="stat"><b>${rows.filter(r=>r.hol).length}</b><span>Holidays</span></div>
+    <div class="stat"><b>${leaveCount}</b><span>Leave days (all staff)</span></div>`;
+
+  // Table
+  let h = `<table class="sched"><thead><tr><th>Date</th>${staff.map(n=>`<th>${esc(n)}</th>`).join("")}</tr></thead><tbody>`;
+  rows.forEach(r=>{
+    const cls = [r.hol ? "r-hol" : (r.dow===0 && !r.ws ? "r-sun" : ""), r.today ? "r-today" : ""].join(" ");
+    h += `<tr class="${cls}"><td><div class="d-date">${nice(r.iso)}</div><div class="d-day">${WEEKDAYS[r.dow]}${r.ws?" · Working":""}</div>${r.hol?`<span class="d-hol">${esc(r.hol.name)}</span>`:""}</td>`;
+    h += r.cells.map(c=>`<td><span class="pill ${c.c}">${c.t}</span></td>`).join("") + `</tr>`;
+  });
+  $("tableWrap").innerHTML = h + `</tbody></table>`;
+
+  // Day cards
+  $("dayCards").innerHTML = rows.map(r=>{
+    const d = fromISO(r.iso);
+    const head = `<div class="day-h"><div class="num">${pad(d.getDate())}</div><div class="meta"><b>${WEEKDAYS[r.dow]}</b>${MONTHS[d.getMonth()]} ${d.getFullYear()}${r.ws?" · Working Sunday":""}</div>${r.hol?`<span class="pill p-x">${esc(r.hol.name)}</span>`:""}</div>`;
+    if(r.hol) return `<div class="day hol collapsed">${head}<div class="day-b">Showroom closed — public holiday</div></div>`;
+    if(r.dow===0 && !r.ws) return `<div class="day sun collapsed">${head}<div class="day-b">Weekly off for all staff</div></div>`;
+    return `<div class="day">${head}<div class="day-b">${r.cells.map((c,i)=>`<div class="row"><span>${esc(staff[i])}</span><span class="pill ${c.c}">${c.t}</span></div>`).join("")}</div></div>`;
+  }).join("");
+
+  applyView();
+}
+
+function applyView(){
+  $("viewArea").className = state.view === "cards" ? "view-cards" : "";
+  document.querySelectorAll("#viewToggle button").forEach(b=>b.classList.toggle("on", b.dataset.view===state.view));
+}
+
+/* ================= Export: Print / PDF / Share ================= */
+function printSchedule(){
+  if(!lastSchedule) return toast("Generate the schedule first", true);
+  window.print();
+}
+
+const PDF_COLORS = {
+  "p-m":[[255,244,214],[138,90,0]], "p-a":[[227,238,252],[29,79,145]], "p-h":[[223,243,228],[30,107,58]],
+  "p-l":[[253,226,225],[168,48,43]], "p-o":[[238,236,235],[107,103,102]], "p-x":[[251,231,198],[140,75,11]]
+};
+let logoDataURL = null;
+function loadLogo(){
+  const img = new Image();
+  img.onload = ()=>{ try{ const c=document.createElement("canvas"); c.width=img.naturalWidth; c.height=img.naturalHeight; c.getContext("2d").drawImage(img,0,0); logoDataURL={url:c.toDataURL("image/png"), w:img.naturalWidth, h:img.naturalHeight}; }catch(e){} };
+  img.src = "logo.png";
+}
+
+function buildPDF(){
+  if(!window.jspdf){ toast("PDF library still loading — try again in a moment (needs internet the first time)", true); return null; }
+  const {jsPDF} = window.jspdf;
+  const {rows, staff} = lastSchedule;
+  const doc = new jsPDF({orientation:"landscape", unit:"pt", format:"a4"});
+  const W = doc.internal.pageSize.getWidth();
+  doc.setFillColor(15,61,62); doc.rect(0,0,W,6,"F");
+  doc.setTextColor(15,61,62); doc.setFont("helvetica","bold"); doc.setFontSize(16);
+  doc.text("Fujairah Showroom — Staff Schedule", 36, 40);
+  doc.setFont("helvetica","normal"); doc.setFontSize(10); doc.setTextColor(107,118,119);
+  doc.text(`Period: ${nice(lastSchedule.start)} – ${nice(lastSchedule.end)}`, 36, 56);
+  if(logoDataURL){ const h=30, w=h*logoDataURL.w/logoDataURL.h; doc.addImage(logoDataURL.url,"PNG",W-36-w,22,w,h); }
+
+  const body = rows.map(r=>[
+    `${nice(r.iso)}\n${WEEKDAYS[r.dow]}${r.hol?" · "+r.hol.name:""}${r.ws?" · Working":""}`,
+    ...r.cells.map(c=>c.t)
+  ]);
+  doc.autoTable({
+    head:[["Date", ...staff]], body, startY:70, margin:{left:36,right:36},
+    theme:"grid",
+    styles:{fontSize:8.5, cellPadding:5, halign:"center", valign:"middle", lineColor:[230,223,211], lineWidth:.5},
+    headStyles:{fillColor:[15,61,62], textColor:255, fontStyle:"bold", fontSize:8.5},
+    columnStyles:{0:{halign:"left", cellWidth:110, fontStyle:"bold"}},
+    didParseCell: data=>{
+      if(data.section!=="body") return;
+      const r = rows[data.row.index];
+      if(data.column.index===0){
+        if(r.hol) data.cell.styles.fillColor=[253,240,219];
+        else if(r.dow===0 && !r.ws) data.cell.styles.fillColor=[242,239,234];
+        return;
+      }
+      const c = r.cells[data.column.index-1], col = PDF_COLORS[c.c];
+      if(col){ data.cell.styles.fillColor = col[0]; data.cell.styles.textColor = col[1]; data.cell.styles.fontStyle="bold"; }
+    },
+    didDrawPage: ()=>{
+      const H = doc.internal.pageSize.getHeight();
+      doc.setFontSize(8); doc.setTextColor(140);
+      doc.text(`© Hesper · Page ${doc.internal.getNumberOfPages()}`, W-36, H-16, {align:"right"});
+    }
+  });
+  return doc;
+}
+function fileName(){ return `Staff_Schedule_${lastSchedule.start}_to_${lastSchedule.end}.pdf`; }
+function downloadPDF(){
+  if(!lastSchedule) return toast("Generate the schedule first", true);
+  const doc = buildPDF(); if(!doc) return;
+  doc.save(fileName()); toast("PDF downloaded");
+}
+/* Share a file through the phone's share sheet (WhatsApp, Mail, Drive…); fall back to download */
+async function shareFile(blob, name){
+  const file = new File([blob], name, {type: blob.type});
+  try{
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:"Staff Schedule"});
+      return;
+    }
+  }catch(e){ if(e.name==="AbortError") return; }
+  downloadBlob(blob, name);
+  toast("Saved to your device — attach it in WhatsApp");
+}
+function downloadBlob(blob, name){
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+async function sharePDF(){
+  if(!lastSchedule) return toast("Generate the schedule first", true);
+  const doc = buildPDF(); if(!doc) return;
+  shareFile(doc.output("blob"), fileName());
+}
+async function shareText(){
+  if(!lastSchedule) return toast("Generate the schedule first", true);
+  const text = scheduleText();
+  try{ if(navigator.share){ await navigator.share({title:"Staff Schedule", text}); return; } }
+  catch(e){ if(e.name==="AbortError") return; }
+  window.open("https://wa.me/?text="+encodeURIComponent(text), "_blank");
+}
+
+/* ---------- JPG image (drawn on canvas, no library, works offline) ---------- */
+const IMG_COLORS = {
+  "p-m":["#fff4d6","#8a5a00"], "p-a":["#e3eefc","#1d4f91"], "p-h":["#dff3e4","#1e6b3a"],
+  "p-l":["#fde2e1","#a8302b"], "p-o":["#eeeceb","#6b6766"], "p-x":["#fbe7c6","#8c4b0b"]
+};
+function loadImg(src){ return new Promise(r=>{ const i=new Image(); i.onload=()=>r(i); i.onerror=()=>r(null); i.src=src; }); }
+function rr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function wrap(ctx, text, maxW){
+  const words = text.split(" "), lines = []; let line = "";
+  words.forEach(w=>{ const t = line ? line+" "+w : w; if(ctx.measureText(t).width > maxW && line){ lines.push(line); line = w; } else line = t; });
+  if(line) lines.push(line); return lines.slice(0,2);
+}
+async function buildImage(){
+  const {rows, staff} = lastSchedule;
+  try{ await document.fonts.ready; }catch(e){}
+  const logo = await loadImg("logo-white.png");
+  const F = "'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif";
+  const S = 2;                                   // retina-sharp
+  const P = 32, DATE_W = 210, COL_W = 160, ROW_H = 54, HEAD_H = 120, TH_H = 58, LEG_H = 54, FOOT_H = 46;
+  const W = Math.max(900, P*2 + DATE_W + COL_W*staff.length);
+  const colW = (W - P*2 - DATE_W) / staff.length;
+  const H = HEAD_H + LEG_H + TH_H + ROW_H*rows.length + FOOT_H + P;
+  const c = document.createElement("canvas"); c.width = W*S; c.height = H*S;
+  const x = c.getContext("2d"); x.scale(S,S); x.textBaseline = "middle";
+
+  // background + header band
+  x.fillStyle = "#f4efe6"; x.fillRect(0,0,W,H);
+  const g = x.createLinearGradient(0,0,W,HEAD_H); g.addColorStop(0,"#0f3d3e"); g.addColorStop(1,"#165a5b");
+  x.fillStyle = g; x.fillRect(0,0,W,HEAD_H);
+  x.fillStyle = "rgba(224,122,95,.35)"; x.beginPath(); x.arc(W-60,-40,170,0,Math.PI*2); x.fill();
+  let tx = P;
+  if(logo){ const lh = 56, lw = lh*logo.width/logo.height; x.drawImage(logo, P, (HEAD_H-lh)/2, lw, lh); tx = P + lw + 22;
+    x.fillStyle = "rgba(255,255,255,.35)"; x.fillRect(tx-11, 30, 1.5, HEAD_H-60); }
+  x.fillStyle = "#fff"; x.font = `800 28px ${F}`; x.fillText("Fujairah Showroom — Staff Schedule", tx, HEAD_H/2 - 14);
+  x.font = `500 17px ${F}`; x.fillStyle = "rgba(255,255,255,.85)";
+  x.fillText(`${nice(lastSchedule.start)} – ${nice(lastSchedule.end)}  ·  ${rows.length} days  ·  ${staff.length} staff`, tx, HEAD_H/2 + 20);
+
+  // legend
+  let lx = P; const ly = HEAD_H + LEG_H/2 + 2;
+  [["Morning","p-m"],["Afternoon","p-a"],["Half Day","p-h"],["Leave","p-l"],["Off","p-o"],["Holiday","p-x"]].forEach(([t,k])=>{
+    x.font = `700 14px ${F}`; const w = x.measureText(t).width + 26;
+    x.fillStyle = IMG_COLORS[k][0]; rr(x,lx,ly-14,w,28,14); x.fill();
+    x.fillStyle = IMG_COLORS[k][1]; x.fillText(t, lx+13, ly); lx += w + 10;
+  });
+
+  // table container
+  const ty = HEAD_H + LEG_H, tw = W - P*2, th = TH_H + ROW_H*rows.length;
+  x.save(); rr(x,P,ty,tw,th,16); x.clip();
+  x.fillStyle = "#fff"; x.fillRect(P,ty,tw,th);
+  x.fillStyle = "#0f3d3e"; x.fillRect(P,ty,tw,TH_H);
+  x.fillStyle = "#fff"; x.font = `800 13px ${F}`; x.textAlign = "left"; x.fillText("DATE", P+16, ty+TH_H/2);
+  x.textAlign = "center";
+  staff.forEach((n,i)=>{
+    const cx = P + DATE_W + colW*i + colW/2, lines = wrap(x, n, colW-16);
+    lines.forEach((l,j)=> x.fillText(l, cx, ty + TH_H/2 + (j - (lines.length-1)/2)*16));
+  });
+  rows.forEach((r,ri)=>{
+    const y = ty + TH_H + ROW_H*ri, sun = r.dow===0 && !r.ws;
+    x.fillStyle = r.hol ? "#fff8ec" : sun ? "#f7f5f2" : (ri%2 ? "#fffdfa" : "#fff"); x.fillRect(P,y,tw,ROW_H);
+    x.fillStyle = r.hol ? "#fdf0db" : sun ? "#f2efea" : "#fbf8f3"; x.fillRect(P,y,DATE_W,ROW_H);
+    x.fillStyle = "#e6dfd3"; x.fillRect(P,y,tw,1); x.fillRect(P+DATE_W,y,1,ROW_H);
+    x.textAlign = "left";
+    x.fillStyle = "#1f2a2b"; x.font = `700 15px ${F}`; x.fillText(nice(r.iso), P+16, y+19);
+    x.font = `600 12px ${F}`; x.fillStyle = r.hol ? "#8c4b0b" : "#6b7677";
+    let sub = WEEKDAYS[r.dow].toUpperCase() + (r.ws ? " · WORKING" : "") + (r.hol ? " · " + r.hol.name : "");
+    while(x.measureText(sub).width > DATE_W-24 && sub.length > 4) sub = sub.slice(0,-2) + "…";
+    x.fillText(sub, P+16, y+37);
+    x.textAlign = "center";
+    r.cells.forEach((cell,i)=>{
+      const cx = P + DATE_W + colW*i + colW/2, [bg,fg] = IMG_COLORS[cell.c];
+      x.font = `700 13px ${F}`;
+      let t = cell.t; const half = /Half Day/.test(t); if(half) t = t.replace(" (Half Day)"," ½");
+      const w = Math.min(colW-14, x.measureText(t).width + 26);
+      x.fillStyle = bg; rr(x, cx-w/2, y+ROW_H/2-15, w, 30, 15); x.fill();
+      x.fillStyle = fg; x.fillText(t, cx, y+ROW_H/2+1);
+    });
+  });
+  x.restore();
+  x.strokeStyle = "#e6dfd3"; x.lineWidth = 1.5; rr(x,P,ty,tw,th,16); x.stroke();
+
+  // footer
+  x.textAlign = "right"; x.fillStyle = "#8a9293"; x.font = `500 12px ${F}`;
+  x.fillText(`Generated ${nice(toISO(new Date()))} · © Hesper`, W-P, H - P/2 - FOOT_H/2 + 6);
+  x.textAlign = "left"; x.fillText("½ = half day", P, H - P/2 - FOOT_H/2 + 6);
+  return new Promise(res=> c.toBlob(res, "image/jpeg", 0.92));
+}
+const jpgName = ()=> fileName().replace(/\.pdf$/, ".jpg");
+async function shareJPG(){
+  if(!lastSchedule) return toast("Generate the schedule first", true);
+  toast("Preparing image…");
+  const blob = await buildImage(); shareFile(blob, jpgName());
+}
+async function downloadJPG(){
+  if(!lastSchedule) return toast("Generate the schedule first", true);
+  const blob = await buildImage(); downloadBlob(blob, jpgName()); toast("JPG saved");
+}
+function scheduleText(){
+  const {rows, staff} = lastSchedule;
+  let t = `*Fujairah Showroom – Staff Schedule*\n${nice(lastSchedule.start)} – ${nice(lastSchedule.end)}\n`;
+  rows.forEach(r=>{
+    t += `\n*${SHORT_DAYS[r.dow]} ${nice(r.iso)}*`;
+    if(r.hol){ t += ` – Holiday: ${r.hol.name}\n`; return; }
+    if(r.dow===0 && !r.ws){ t += ` – Off\n`; return; }
+    t += "\n" + r.cells.map((c,i)=>`• ${staff[i]}: ${c.t}`).join("\n") + "\n";
+  });
+  return t;
+}
+
+/* ================= Wire up ================= */
+$("startDate").addEventListener("change", e=>{ state.start=e.target.value; save(); renderPeriod(); });
+$("endDate").addEventListener("change", e=>{ state.end=e.target.value; save(); renderPeriod(); });
+document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click", ()=>quickRange(b.dataset.q)));
+$("addMemberBtn").addEventListener("click", addMember);
+$("newMember").addEventListener("keydown", e=>{ if(e.key==="Enter") addMember(); });
+$("addHolidayBtn").addEventListener("click", addHoliday);
+$("addSundayBtn").addEventListener("click", addWorkingSunday);
+$("generateBtn").addEventListener("click", generateSchedule);
+$("printBtn").addEventListener("click", printSchedule);
+$("pdfBtn").addEventListener("click", downloadPDF);
+$("shareBtn").addEventListener("click", shareText);
+$("waJpgBtn").addEventListener("click", shareJPG);
+$("waPdfBtn").addEventListener("click", sharePDF);
+$("jpgBtn").addEventListener("click", downloadJPG);
+$("viewToggle").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; state.view=b.dataset.view; save(); applyView(); });
+
+let hadSaved = false;
+try{ hadSaved = !!localStorage.getItem(STORE_KEY); }catch(e){}
+load();
+if(!state.view) state.view = "table";
+if(!hadSaved && window.matchMedia("(max-width:760px)").matches) state.view = "cards";
+renderPeriod(); renderTeam(); renderTags(); loadLogo();
+
+/* ================= PWA ================= */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+let deferredPrompt = null;
+window.addEventListener("beforeinstallprompt", e=>{ e.preventDefault(); deferredPrompt = e; $("installBtn").classList.add("show"); });
+$("installBtn").addEventListener("click", async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null;
+  $("installBtn").classList.remove("show");
+});
+window.addEventListener("appinstalled", ()=>{ $("installBtn").classList.remove("show"); toast("App installed"); });
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+const standalone = window.matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+if(isIOS && !standalone) $("iosHint").classList.add("show");
+</script>
+</body>
+</html>
